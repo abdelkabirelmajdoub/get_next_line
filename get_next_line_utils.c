@@ -6,12 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 19:03:53 by ael-majd          #+#    #+#             */
-/*   Updated: 2024/11/23 15:22:59 by ael-majd         ###   ########.fr       */
+/*   Updated: 2024/11/23 18:30:21 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 size_t	ft_strlen(const char *s)
 {
@@ -25,10 +24,32 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
+char	*ft_strdup(const char *s)
+{
+	char	*d;
+	int		i;
+	int		len;
+
+	len = ft_strlen(s) + 1;
+	d = malloc(sizeof(char) * len);
+	if (!d)
+	{
+		free(d);
+		return (NULL);
+	}
+	i = 0;
+	while (s[i])
+	{
+		d[i] = s[i];
+		i++;
+	}
+	d[i] = '\0';
+	return (d);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		i;
-	int		j;
 	char	*join;
 
 	if (!s1 && !s2)
@@ -40,19 +61,17 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	join = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!join)
 		return (NULL);
+	ft_strlcpy(join, s1, ft_strlen(s1) + 1);
 	i = 0;
-	while (s1[i])
-		{join[i] = s1[i];
-		i++;}
-	j = 0;
-	while (s2[j])
+	while (s2[i])
 	{
-		join[ft_strlen(s1) + j] = s2[j];
-		j++;
+		join[ft_strlen(s1) + i] = s2[i];
+		i++;
 	}
-	join[ft_strlen(s1)+ j] = '\0';
+	join[ft_strlen(s1)+ i] = '\0';
 	return (join);
 }
+
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
@@ -68,6 +87,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	dst[i] = '\0';
 	return (ft_strlen(src));
 }
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*str;
@@ -84,4 +104,5 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	ft_strlcpy(str, &s[start], len + 1);
 	return (str);
 }
+
 
