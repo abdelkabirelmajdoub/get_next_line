@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 19:03:53 by ael-majd          #+#    #+#             */
-/*   Updated: 2024/11/23 18:30:21 by ael-majd         ###   ########.fr       */
+/*   Updated: 2024/11/24 17:46:38 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (0);
 	while (s[i] != '\0')
 	{
 		i++;
@@ -30,13 +32,12 @@ char	*ft_strdup(const char *s)
 	int		i;
 	int		len;
 
+	if (!s)
+		return (NULL);
 	len = ft_strlen(s) + 1;
 	d = malloc(sizeof(char) * len);
 	if (!d)
-	{
-		free(d);
 		return (NULL);
-	}
 	i = 0;
 	while (s[i])
 	{
@@ -47,7 +48,7 @@ char	*ft_strdup(const char *s)
 	return (d);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	char	*join;
@@ -55,9 +56,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
-		s1 = "";
+		return (ft_strdup(s2));
 	if (!s2)
-		s2 = "";
+		return (ft_strdup(s1));
 	join = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!join)
 		return (NULL);
@@ -68,7 +69,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		join[ft_strlen(s1) + i] = s2[i];
 		i++;
 	}
-	join[ft_strlen(s1)+ i] = '\0';
+	join[ft_strlen(s1) + i] = '\0';
 	return (join);
 }
 
@@ -104,5 +105,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	ft_strlcpy(str, &s[start], len + 1);
 	return (str);
 }
-
-
