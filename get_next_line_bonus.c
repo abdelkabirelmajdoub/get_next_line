@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/23 10:10:18 by ael-majd          #+#    #+#             */
-/*   Updated: 2024/11/26 13:52:04 by ael-majd         ###   ########.fr       */
+/*   Created: 2024/11/25 09:56:28 by ael-majd          #+#    #+#             */
+/*   Updated: 2024/11/26 13:51:06 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	find_newline(char *s)
 {
@@ -41,9 +41,9 @@ char	*read_line(int fd, char *rest)
 	while (byte_read)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
+		buffer[byte_read] = '\0';
 		if (byte_read < 0)
 			return (free(buffer), NULL);
-		buffer[byte_read] = '\0';
 		temp = rest;
 		rest = ft_strjoin(rest, buffer);
 		free(temp);
@@ -95,7 +95,7 @@ char	*update_rest(char **rest)
 		*rest = NULL;
 		return (NULL);
 	}
-	new_rest = ft_strdup((*rest + new_index + 1));
+	new_rest = ft_strdup(*rest + new_index + 1);
 	if (!new_rest)
 	{
 		free(*rest);
@@ -109,23 +109,23 @@ char	*update_rest(char **rest)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*rest[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE <= 0 || fd >= OPEN_MAX)
 	{
-		free(rest);
-		rest = NULL;
+		free(rest[fd]);
+		rest[fd] = NULL;
 		return (NULL);
 	}
-	rest = read_line(fd, rest);
-	if (!rest || *rest == '\0')
+	rest[fd] = read_line(fd, rest[fd]);
+	if (!rest[fd] || *rest[fd] == '\0')
 	{
-		free(rest);
-		rest = NULL;
+		free(rest[fd]);
+		rest[fd] = NULL;
 		return (NULL);
 	}
-	line = getting_line(&rest);
-	rest = update_rest(&rest);
+	line = getting_line(&rest[fd]);
+	rest[fd] = update_rest(&rest[fd]);
 	return (line);
 }
